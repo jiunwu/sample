@@ -9,17 +9,24 @@ import org.buffer.android.boilerplate.cache.PreferencesHelper
 import org.buffer.android.boilerplate.cache.db.DbOpenHelper
 import org.buffer.android.boilerplate.cache.mapper.BufferooEntityMapper
 import org.buffer.android.boilerplate.data.BufferooDataRepository
+import org.buffer.android.boilerplate.data.POEditorDataRepository
 import org.buffer.android.boilerplate.data.executor.JobExecutor
 import org.buffer.android.boilerplate.data.mapper.BufferooMapper
 import org.buffer.android.boilerplate.data.repository.BufferooCache
 import org.buffer.android.boilerplate.data.repository.BufferooRemote
+import org.buffer.android.boilerplate.data.repository.POEditorProjectRemote
 import org.buffer.android.boilerplate.data.source.BufferooDataStoreFactory
+import org.buffer.android.boilerplate.data.source.POEditorDataStoreFactory
 import org.buffer.android.boilerplate.domain.executor.PostExecutionThread
 import org.buffer.android.boilerplate.domain.executor.ThreadExecutor
 import org.buffer.android.boilerplate.domain.repository.BufferooRepository
+import org.buffer.android.boilerplate.domain.repository.POEditorRepository
 import org.buffer.android.boilerplate.remote.BufferooRemoteImpl
 import org.buffer.android.boilerplate.remote.BufferooService
 import org.buffer.android.boilerplate.remote.BufferooServiceFactory
+import org.buffer.android.boilerplate.remote.POEditorRemoteImpl
+import org.buffer.android.boilerplate.remote.POEditorService
+import org.buffer.android.boilerplate.remote.POEditorServiceFactory
 import org.buffer.android.boilerplate.ui.BuildConfig
 import org.buffer.android.boilerplate.ui.UiThread
 import org.buffer.android.boilerplate.ui.injection.scopes.PerApplication
@@ -52,6 +59,12 @@ open class ApplicationModule {
 
     @Provides
     @PerApplication
+    internal fun providePOEditorRepository(factory: POEditorDataStoreFactory): POEditorRepository{
+        return POEditorDataRepository(factory)
+    }
+
+    @Provides
+    @PerApplication
     internal fun provideBufferooCache(factory: DbOpenHelper,
                                       entityMapper: BufferooEntityMapper,
                                       mapper: org.buffer.android.boilerplate.cache.db.mapper.BufferooMapper,
@@ -64,6 +77,12 @@ open class ApplicationModule {
     internal fun provideBufferooRemote(service: BufferooService,
                                        factory: org.buffer.android.boilerplate.remote.mapper.BufferooEntityMapper): BufferooRemote {
         return BufferooRemoteImpl(service, factory)
+    }
+
+    @Provides
+    @PerApplication
+    internal fun providePOEfitorRemote(service: POEditorService): POEditorProjectRemote{
+        return POEditorRemoteImpl(service)
     }
 
     @Provides
@@ -82,5 +101,11 @@ open class ApplicationModule {
     @PerApplication
     internal fun provideBufferooService(): BufferooService {
         return BufferooServiceFactory.makeBuffeoorService(BuildConfig.DEBUG)
+    }
+
+    @Provides
+    @PerApplication
+    internal fun providePOEditorService(): POEditorService{
+        return POEditorServiceFactory.makePOEditorService(BuildConfig.DEBUG)
     }
 }

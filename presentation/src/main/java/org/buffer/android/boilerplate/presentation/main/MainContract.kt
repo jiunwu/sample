@@ -1,5 +1,6 @@
 package org.buffer.android.boilerplate.presentation.main
 
+import org.buffer.android.boilerplate.domain.model.Bufferoo
 import org.buffer.android.boilerplate.presentation.BasePresenter
 import org.buffer.android.boilerplate.presentation.BaseView
 import org.buffer.android.boilerplate.presentation.model.BufferooView
@@ -23,11 +24,13 @@ interface MainContract {
 
         fun hideEmptyState()
 
+        fun showResult(bufferoo: List<Bufferoo>)
+
     }
 
     interface Presenter : BasePresenter {
 
-        fun retrieveBufferoos()
+        fun callResponse()
 
     }
 
